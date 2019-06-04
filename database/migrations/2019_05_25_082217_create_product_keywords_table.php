@@ -18,8 +18,8 @@ class CreateProductKeywordsTable extends Migration
 
             $table->string('name');
 
-            $table->integer('product_id')->unsigned();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->integer('product_translation_id')->unsigned();
+            $table->foreign('product_translation_id')->references('id')->on('product_translations')->onDelete('cascade');
         });
     }
 

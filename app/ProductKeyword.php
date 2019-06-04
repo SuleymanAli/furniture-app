@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductKeyword extends Model
 {
-    public function product()
+    public function productTranslation()
     {
     	return $this->belongsTo('App\ProductTranslation');
     }

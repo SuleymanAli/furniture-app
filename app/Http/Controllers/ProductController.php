@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
+use App\ProductTranslation;
+use App\Category;
+use App;
+use Session;
 
 class ProductController extends Controller
 {
@@ -13,7 +18,25 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        $categories = Category::all();
+
+        if (request()->category) {
+            $category = Category::find(request()->category);
+            $products = $category->products()->get();
+        }
+        
+        return view('products.index', [
+            'products' => $products,
+            'categories' => $categories
+        ]);
+    }
+
+    public function lang($lang)
+    {
+        Session::put('lang', $lang);
+
+        return redirect()->back()->with('success', Session::get('lang'));
     }
 
     /**
@@ -45,7 +68,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $productTranslation = ProductTranslation::find($id);
+
+        return view('products.show', ['productTranslation' => $productTranslation]);
     }
 
     /**

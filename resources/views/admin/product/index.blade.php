@@ -12,21 +12,57 @@
 	<table class="table table-striped table-sm">
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Header</th>
-				<th>Header</th>
-				<th>Header</th>
-				<th>Header</th>
+				<th>Id</th>
+				<th>Price</th>
+				<th>Category</th>
+				<th>Image</th>
+				<th>Add Lang</th>
+				<th>View Product</th>
+				<th>Edit</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
+			@foreach ($products as $product)
 			<tr>
-				<td>1,001</td>
-				<td>Lorem</td>
-				<td>ipsum</td>
-				<td>dolor</td>
-				<td>sit</td>
+				<td>
+					{{ $product->id }}
+				</td>
+				<td>
+					{{ $product->price }}
+				</td>
+				<td>
+					@if ($product->category_id)
+						{{ $product->category->name }}
+					@endif
+				</td>
+				<td>
+					{{ $product->image }}
+				</td>
+				<td>
+					<a href="{{ route('product.createMultilang', $product->id) }}" class="btn btn-sm btn-success">
+						Add Language
+					</a>
+				</td>
+				<td>
+					<a href="{{ route('admin.show', $product->id) }}" class="btn btn-sm btn-secondary">
+						View
+					</a>
+				</td>
+				<td>
+					<a href="{{ route('admin.edit', $product->id) }}" class="btn btn-sm btn-primary">
+						Edit
+					</a>
+				</td>
+				<td>
+					{!! Form::open(['route' => ['admin.destroy', $product->id], 'method'=>'DELETE']) !!}                     
+                    
+                    {!! Form::submit('Delete', ['class'=>'btn btn-sm btn-danger']) !!}
+
+                    {!! Form::close() !!}
+				</td>
 			</tr>
+			@endforeach
 		</tbody>
 	</table>
 </div>

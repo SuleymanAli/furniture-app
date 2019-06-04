@@ -1,28 +1,31 @@
-@extends('layout.admin')
+	@extends('layout.admin')
 
-@section('content')
+	@section('content')
+	<div class="col-md-10 mx-auto">
+		{!! Form::open(['route' => 'admin.store', 'data-parsley-validate' => '', 'files' => true]) !!}
+		{{ Form::label('title', 'Title:') }}
+		{{ Form::text('title', null, ['class'=>'form-control', 'required'=>'', 'maxlength'=>'255']) }}
 
-{!! Form::open(['route' => 'product.store', 'data-parsley-validate' => '', 'files' => true]) !!}
-{{ Form::label('price', 'Title:') }}
-{{ Form::text('price', null, ['class'=>'form-control', 'required'=>'', 'maxlength'=>'255']) }}
+		{{ Form::label('language', 'Language:', ['class'=>'mt-3']) }}
+		{{ Form::text('language', null, ['class'=>'form-control', 'required'=>'']) }}
 
-{{ Form::label('image', 'Slug:') }}
-{{ Form::text('image', null, ['class'=>'form-control', 'required'=>'', 'minlength'=>'5','maxlength'=>'255']) }}
+		{{ Form::label('price', 'Price:', ['class'=>'mt-3']) }}
+		{{ Form::text('price', null, ['class'=>'form-control', 'required'=>'']) }}
 
-{{-- {{ Form::label('category_id', 'Category:') }}
-<select name="category_id" class="form-control">
-	@foreach($categories as $category)
-	<option value="{{ $category->id }}">{{ $category->name }}</option>
-	@endforeach
-</select>
- --}}
-{{-- {{ Form::label('featured_image', "Upload Feature Image:") }}
-{{ Form::file('featured_image') }} --}}
+		{{ Form::label('category_id', 'Category:', ['class'=>'mt-3']) }}
+		<select name="category_id" class="form-control">
+			@foreach($categories as $category)
+			<option value="{{ $category->id }}">{{ $category->name }}</option>
+			@endforeach
+		</select>
 
-{{-- {{ Form::label('body', 'Body:', ['class'=>'mt-4']) }}
-{{ Form::textarea('body', null, ['class'=>'form-control', 'required'=>'']) }} --}}
+		{{ Form::label('image', "Upload Feature Image:", ['class' => 'mt-3 d-block']) }}
+		{{ Form::file('image', ['class' => 'd-block']) }}
 
-{{ Form::submit('Create post', ['class'=>'btn btn-success btn-lg btn-block mt-4']) }}
-{!! Form::close() !!}
+		{{ Form::label('description', 'Description:', ['class'=>'mt-3']) }}
+		{{ Form::textarea('description', null, ['class'=>'form-control', 'required'=>'']) }}
 
-@endsection
+		{{ Form::submit('Create Product', ['class'=>'btn btn-success btn-lg btn-block mt-4']) }}
+		{!! Form::close() !!}
+	</div>
+	@endsection

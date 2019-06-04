@@ -30,6 +30,16 @@
         user-select: none;
     }
 
+    a,a:hover {
+        text-decoration: inherit;
+        color: inherit;
+    }
+
+    p {
+        padding: 0;
+        margin: 0; 
+    }
+        
     @media (min-width: 768px) {
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
@@ -44,45 +54,51 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">Company name</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark {{ Request::is('/') ? "bg-info" : null }}" href="#">
+            <a class="p-2 text-dark {{ Request::is('/') ? "bg-info" : null }}" href="/">
                 Home
             </a>
-            <a class="p-2 text-dark {{ Request::is('/products') ? "bg-info" : null }}" href="#">
-                Products
+            <a class="p-2 text-dark {{ Request::is('/admin') ? "bg-info" : null }}" href="/admin">
+                Admin
             </a>
-            <a class="p-2 text-dark {{ Request::is('/category') ? "bg-info" : null }}" href="#">
+            <a class="p-2 text-dark {{ Request::is('/category') ? "bg-info" : null }}" href="/category">
                 Category
             </a>
-            <a class="p-2 text-dark {{ Request::is('/order') ? "bg-info" : null }}" href="#">
+            <a class="p-2 text-dark {{ Request::is('/order') ? "bg-info" : null }}" href="/order">
                 Order
             </a>
         </nav>
         <ul class="navbar-nav">
             <li class="nav-item dropdown mr-2">
+
                 @if(Auth::check())
+
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
-                Hi, {{ Auth::user()->name }}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ route('posts.index') }}">Posts</a>
-                <a class="dropdown-item" href="{{ route('category.index') }}">Categories</a>
-                <a class="dropdown-item" href="{{ route('tags.index') }}">Tags</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
-            </div>
-            @else
-            <a href="{{ route('register') }}" class="btn btn-outline-primary">Sign up</a>
-            <a href="{{ route('login') }}" class="btn btn-primary mr-md-4">Login</a>
-            @endif
-        </li>
+                    Hi, {{ Auth::user()->name }}
+                </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('product.index') }}">Products</a>
+                        <a class="dropdown-item" href="{{ route('category.index') }}">Categories</a>
+                        {{-- <a class="dropdown-item" href="{{ route('tags.index') }}">Tags</a> --}}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
+                    </div>
+
+                @else
+
+                    <a href="{{ route('register') }}" class="btn btn-outline-primary">Sign up</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary mr-md-4">Login</a>
+                
+                @endif
+
+            </li>
     </ul>
 </div>
 
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+{{-- <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Pricing</h1>
     <p class="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
-</div>
+</div> --}}
 <div class="container">
     <div class="row">
         @include('partials._messages')

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App;
 
 class Product extends Model
 {
@@ -16,8 +17,17 @@ class Product extends Model
 		return $this->hasMany('App\Comment');
 	}
 
-	public function translation()
+	public function translationAll()
 	{
 		return $this->hasMany('App\ProductTranslation');
+	}
+
+	public function translation($language = null)
+	{
+		if ($language == null) {
+			$language = App::getLocale();
+		}
+
+		return $this->hasMany('App\ProductTranslation')->where('language', '=', $language);
 	}
 }
