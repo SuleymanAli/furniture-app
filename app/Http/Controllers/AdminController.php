@@ -7,6 +7,8 @@ use App\Product;
 use App\ProductTranslation;
 use App\ProductKeyword;
 use App\Category;
+use App\User;
+use App\Role;
 use Storage;
 use Session;
 
@@ -288,5 +290,33 @@ class AdminController extends Controller
         Session::flash('success','This Product Translation Deleted Successfully');
 
         return redirect()->route('admin.show', $productTranslation->product->id);
+    }
+
+    public function getAdminPage()
+    {
+        $users = User::all();
+
+        return view('admin.admin', ['users' => $users]);
+    }
+
+    public function AssignRole(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        $user->roles()->detach();
+
+        if ($request['role_user']) {
+            $user->roles()->attach(Role::where('name', 'User')->first());
+        }
+
+        if ($request['role_author']) {
+            $user->roles()->attach(Role::where('name', 'Author')->first());
+        }
+
+        if ($request['role_admin']) {
+            $user->roles()->attach(Role::where('name', 'Admin')->first());
+        }
+
+        return redirect()->back();
     }
 }

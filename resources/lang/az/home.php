@@ -1,7 +1,7 @@
 <?php 
 
 return [
-	'hello' => 'Hello Azerbaycan'
+	'language' => 'Azerbaycanca',
 ];
 
  ?>

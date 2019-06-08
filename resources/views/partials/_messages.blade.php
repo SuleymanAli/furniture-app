@@ -1,7 +1,7 @@
 @if(Session::has('success'))
 
     <div class="alert alert-success" role="alert" class="mt-4">
-        <strong>Success:</strong> {{ Session::get('success')}}
+        {{ Session::get('success')}}
     </div>
 
 @endif
@@ -15,6 +15,16 @@
             <li>{{$error}}</li>
         @endforeach
         </ul>
+    </div>
+
+@endif
+
+@if(Session::has('message'))
+
+    <div class="alert alert-warning" role="alert" class="mt-4">
+        <strong>
+            {{ Session::get('message')}}
+        </strong>
     </div>
 
 @endif

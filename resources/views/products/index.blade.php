@@ -42,37 +42,19 @@
 					<ul class="list-unstyled mt-3 mb-4">
 						<li>{{ $translation->description }}</li>
 					</ul>
-					<a href="{{ route('product.show', $translation->slug) }}">
-						<button type="button" class="btn btn-lg btn-block btn-outline-primary">
-							Add To Cart
-						</button>
-					</a>
+					
+						{{ Form::open(['route'=>['product.cart', $translation->product->id], 'method'=> 'POST']) }}
+
+						{{ Form::submit('Add To Cart', ['class'=>'btn btn-lg btn-block btn-outline-primary']) }}
+
+						{{ Form::close() }}
 				</div>
 			</div>
 		</div>
 	</div>
 	@endforeach
 	@endforeach
-	{{-- <hr>{{ dd(request()->route()) }} <br> --}}
-	<hr>{{ App::getLocale() }} <br>
-	@lang('home.hello') <br>
-	<ul class="d-block">
-		<li>
-			<a href="{{ route('lang', 'en') }}">
-				En
-			</a>
-		</li>
-		<li>
-			<a href="{{ route('lang', 'az') }}">
-				Az
-			</a>
-		</li>
-		<li>
-			<a href="{{ route('lang', 'de') }}">
-				De
-			</a>
-		</li>
-	</ul>
+	<hr>
 </div>
 
 @endsection

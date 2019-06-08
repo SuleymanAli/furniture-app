@@ -39,7 +39,7 @@
         padding: 0;
         margin: 0; 
     }
-        
+
     @media (min-width: 768px) {
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
@@ -52,19 +52,43 @@
 <body>
 
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Company name</h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal">
+            <a href="/">Woodpacker</a>
+        </h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark {{ Request::is('/') ? "bg-info" : null }}" href="/">
+            <a class="p-2 text-dark {{ Request::is('/') || Request::is('home') ? "bg-info" : null }}" href="/">
                 Home
             </a>
-            <a class="p-2 text-dark {{ Request::is('/admin') ? "bg-info" : null }}" href="/admin">
-                Admin
+            <a class="p-2 text-dark {{ Request::is('product') ? "bg-info" : null }}" href="/product">
+                Products
             </a>
-            <a class="p-2 text-dark {{ Request::is('/category') ? "bg-info" : null }}" href="/category">
-                Category
+            <a class="p-2 text-dark {{ Request::is('cart') ? "bg-info" : null }}" href="/cart">
+                Cart
+                @if (request()->session()->has('cart'))
+                <span class="badge badge-warning">
+                    {{  request()->session()->get('cart')->totalQty }}
+                </span>
+                @endif
             </a>
-            <a class="p-2 text-dark {{ Request::is('/order') ? "bg-info" : null }}" href="/order">
+            <a class="p-2 text-dark {{ Request::is('order') ? "bg-info" : null }}" href="/order">
                 Order
+            </a>
+            @if (Auth::check())
+                @if (auth()->user()->hasAnyRole('admin'))
+                    <a class="p-2 text-dark {{ Request::is('admin') ? "bg-info" : null }}" href="/admin">
+                        Admin
+                    </a>
+                @endif
+            @endif
+                <a href="{{ route('lang', 'en') }}" class="{{ App::getLocale() == 'en' ? 'bg-info' : ''}} ml-2 p-1">
+                    En
+                </a>
+            
+            <a href="{{ route('lang', 'az') }}" class="{{ App::getLocale() == 'az' ? 'bg-info' : ''}} mx-1 p-1">
+                Az
+            </a>
+            <a href="{{ route('lang', 'de') }}" class="{{ App::getLocale() == 'de' ? 'bg-info' : ''}} mr-2 p-1">
+                De
             </a>
         </nav>
         <ul class="navbar-nav">
@@ -74,24 +98,24 @@
 
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
-                    Hi, {{ Auth::user()->name }}
-                </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('product.index') }}">Products</a>
-                        <a class="dropdown-item" href="{{ route('category.index') }}">Categories</a>
-                        {{-- <a class="dropdown-item" href="{{ route('tags.index') }}">Tags</a> --}}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
-                    </div>
+                Hi, {{ Auth::user()->name }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('product.index') }}">Products</a>
+                <a class="dropdown-item" href="{{ route('category.index') }}">Categories</a>
+                {{-- <a class="dropdown-item" href="{{ route('tags.index') }}">Tags</a> --}}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
+            </div>
 
-                @else
+            @else
 
-                    <a href="{{ route('register') }}" class="btn btn-outline-primary">Sign up</a>
-                    <a href="{{ route('login') }}" class="btn btn-primary mr-md-4">Login</a>
-                
-                @endif
+            <a href="{{ route('register') }}" class="btn btn-outline-primary">Sign up</a>
+            <a href="{{ route('login') }}" class="btn btn-primary mr-md-4">Login</a>
 
-            </li>
+            @endif
+
+        </li>
     </ul>
 </div>
 
@@ -166,10 +190,6 @@
                     <h5>Features</h5>
                     <ul class="list-unstyled text-small">
                         <li><a class="text-muted" href="#">Cool stuff</a></li>
-                        <li><a class="text-muted" href="#">Random feature</a></li>
-                        <li><a class="text-muted" href="#">Team feature</a></li>
-                        <li><a class="text-muted" href="#">Stuff for developers</a></li>
-                        <li><a class="text-muted" href="#">Another one</a></li>
                         <li><a class="text-muted" href="#">Last time</a></li>
                     </ul>
                 </div>
@@ -177,8 +197,6 @@
                     <h5>Resources</h5>
                     <ul class="list-unstyled text-small">
                         <li><a class="text-muted" href="#">Resource</a></li>
-                        <li><a class="text-muted" href="#">Resource name</a></li>
-                        <li><a class="text-muted" href="#">Another resource</a></li>
                         <li><a class="text-muted" href="#">Final resource</a></li>
                     </ul>
                 </div>
@@ -186,8 +204,6 @@
                     <h5>About</h5>
                     <ul class="list-unstyled text-small">
                         <li><a class="text-muted" href="#">Team</a></li>
-                        <li><a class="text-muted" href="#">Locations</a></li>
-                        <li><a class="text-muted" href="#">Privacy</a></li>
                         <li><a class="text-muted" href="#">Terms</a></li>
                     </ul>
                 </div>

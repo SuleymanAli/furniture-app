@@ -121,11 +121,11 @@
                             {{ strlen($comment->comment_content) > 100 ? "..." : '' }}
                         </td>
                         <td>
-                            <a href="{{ route('comments.delete', $comment->id) }}" class="btn btn-sm btn-block btn-danger">
-                                <span>
-                                    Delete
-                                </span>
-                            </a>
+                            {{ Form::open(['route'=>['comments.destroy', $comment->id], 'method'=> 'DELETE']) }}
+
+                            {{ Form::submit('Delete', ['class'=>'btn btn-sm btn-danger']) }}
+
+                            {{ Form::close() }}
                         </td>
                     </tr>
                     @endforeach

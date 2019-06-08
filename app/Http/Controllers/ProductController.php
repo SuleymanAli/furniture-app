@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App;
+use App\Cart;
+use App\Category;
 use App\Product;
 use App\ProductTranslation;
-use App\Category;
-use App;
+use Illuminate\Http\Request;
 use Session;
+use Stripe\Charge;
+use Stripe\Stripe;
 
 class ProductController extends Controller
 {
@@ -32,78 +35,86 @@ class ProductController extends Controller
         ]);
     }
 
+
+    // Change The Language
     public function lang($lang)
     {
         Session::put('lang', $lang);
 
-        return redirect()->back()->with('success', Session::get('lang'));
+        App::setLocale($lang);
+        
+        return redirect()->back()->with('success', 'Your Language Changed To '. __('home.language'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    // Add To Cart
+    public function getAddToCart(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+        $cart = new Cart($oldCart);
+
+        $cart->add($product, $product->id);
+
+        $request->session()->put('cart', $cart);
+
+        return redirect()->back()->withSuccess('Product Added Your Cart');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    // Cart Page
+    public function getCart()
     {
-        //
+        if (!Session::has('cart')) {
+            return view('cart.index');
+        }
+
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+
+        return view('cart.index', [
+            'products' => $cart->items,
+            'totalPrice' => $cart->totalPrice
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    // Checkout Page
+    public function getCheckout()
     {
-        $productTranslation = ProductTranslation::find($id);
-
-        return view('products.show', ['productTranslation' => $productTranslation]);
+        if (!Session::has('cart')) {
+            return view('cart.index');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        $total = $cart->totalPrice;
+        return view('cart.checkout', ['total' => $total]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    // Checkout Page
+    public function postCheckout(Request $request)
     {
-        //
-    }
+        if (!Session::has('cart')) {
+            return redirect()->route('cart.index');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        Stripe::setApiKey('sk_test_iZlnQPa2iLsjDl0ctV8J3NHU');
+        try {
+            $token = $request->input('stripeToken');
+            Charge::create([
+                'amount' => $cart->totalPrice * 100,
+                'currency' => 'usd',
+                'description' => 'Test Charge',
+                'source' => $token,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('checkout')->with('error', $e->getMessage());
+        }
+
+        Session::forget('cart');
+
+        return redirect()->route('product.index')->with('success', 'Successfully Purrchased Products');
     }
 }

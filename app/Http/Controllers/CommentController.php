@@ -45,48 +45,6 @@ class CommentController extends Controller
         return redirect()->route('product.show', $productTranslationSlug);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        // $comment = Comment::find($id);
-
-        // return view('comments.edit')->withComment($comment);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        // $comment = Comment::find($id);
-
-        // $this->validate($request, [
-        //     'comment'=>'required',
-        // ]);
-
-        // $comment->comment = $request->comment;
-        // $comment->save();
-
-        // Session::flash('success', 'Comment Updated');
-
-        // return redirect()->route('posts.show', $comment->posts->id); 
-    }
-
-    public function delete($id)
-    {
-        // $comment = Comment::find($id);
-
-        // return view('comments.delete')->withComment($comment);
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -104,6 +62,6 @@ class CommentController extends Controller
 
         Session::flash('success','Deleted Comment');
 
-        return redirect()->route('product.show', $product_id);        
+        return redirect()->back()->withSuccess('Comment Deleted');        
     }
 }

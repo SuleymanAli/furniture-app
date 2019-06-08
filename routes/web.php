@@ -14,61 +14,64 @@
 
 Route::group(['middleware' => ['web']], function() {
 
-	// Simple Intro
-	Route::get('/', function () {
-		return redirect()->route('product.index');
-	});
+	// Home Page
+	Route::get('/', 'HomeController@index')->name('home');
+	Route::get('/home', 'HomeController@index')->name('home');
+
+	// Product
+	Route::resource('product', 'ProductController', ['only' => ['index']]);
+	Route::post('product/{id}/cart', 'ProductController@getAddToCart')->name('product.cart');
+
+	// Showing Product Single By Slug
+	Route::get('product/{slug}', 'MainController@show')
+		->name('product.show')
+		->where('slug', '[\w\d\-\_]+');
+	
+	// Cart
+	Route::get('cart', 'ProductController@getCart')->name('cart.index');
+
+	// Checkout
+	Route::get('checkout', 'ProductController@getCheckout')->name('checkout');
+	Route::post('checkout', 'ProductController@postCheckout')->name('checkout');
+	
+	// User
+	Auth::routes();
+	Route::get('logout', 'Auth\LoginController@logout');
 
 	// Multilanguage
 	Route::get('/{lang}/product', 'ProductController@lang')->name('lang');
-	
-	// User
-	Route::get('logout', 'Auth\LoginController@logout');
-	Auth::routes();
 
 	// Admin Area
-	Route::resource('admin', 'AdminController');
+	Route::group(['middleware' => 'roles:Admin,Author'], function () {
+		Route::resource('admin', 'AdminController');
+		Route::get('roles', 'AdminController@getAdminPage');
+		Route::post('roles', 'AdminController@AssignRole')->name('role.assign');
 
-	// Route::group(['prefix' => 'admin'], function () {
-	// });
+		// Add Another Language To Product
+		Route::get('product/{product}/create', 'AdminController@createMultilang')
+		->name('product.createMultilang');
+		Route::post('product/{product}', 'AdminController@storeMultilang')
+		->name('product.storeMultilang');
+		Route::get('product/{product}/edit', 'AdminController@editMultilang')
+		->name('product.editMultilang');
+		Route::put('product/{product}', 'AdminController@updateMultilang')
+		->name('product.updateMultilang');
+		Route::delete('product/{product}', 'AdminController@destroyMultilang')
+		->name('product.destroyMultilang');
+		
+		// Category
+		Route::resource('category', 'CategoryController', ['except' => ['create', 'show']]);
+	});
 
-	// Category
-	Route::resource('category', 'CategoryController', ['except' => ['create', 'show']]);
+	Route::group(['middleware'=>'auth'], function(){
+		// Comment
+		Route::post('comments/{prduct_id}', 'CommentController@store')
+			->name('comments.store');
+			
+		Route::delete('comments/{id}', 'CommentController@destroy')
+			->name('comments.destroy');
+	});
 
-	// Product
-	Route::resource('product', 'ProductController', ['except' => ['show']]);
-
-	// Comment
-	// Route::resource('comment', 'CommentController');
-
-	// Add Another Language To Product
-	Route::get('product/{product}/create', 'AdminController@createMultilang')->name('product.createMultilang');
-
-	Route::post('product/{product}', 'AdminController@storeMultilang')->name('product.storeMultilang');
-
-	Route::get('product/{product}/edit', 'AdminController@editMultilang')->name('product.editMultilang');
-
-	Route::put('product/{product}', 'AdminController@updateMultilang')->name('product.updateMultilang');
-
-	Route::delete('product/{product}', 'AdminController@destroyMultilang')->name('product.destroyMultilang');
-
-	// Showing Product Single By Slug
-	Route::get('product/{slug}', 'MainController@show')->name('product.show')
-	->where('slug', '[\w\d\-\_]+');
-
-	// Route::get('product', 'ProductController@getSingle')->name('product.index');
-
-	// Comment CRUD
-	Route::post('comments/{prduct_id}', 'CommentController@store')->name('comments.store');
-
-	// Route::group(['middleware'=>'auth'], function(){
-	Route::get('comments/{id}/edit', 'CommentController@edit')->name('comments.edit');
-	Route::put('comments/{id}', 'CommentController@update')->name('comments.update');
-	Route::get('comments/{id}/delete', 'CommentController@delete')->name('comments.delete');
-	Route::delete('comments/{id}', 'CommentController@destroy')->name('comments.destroy');
-	// });
-
-
-	Route::get('/home', 'HomeController@index')->name('home');
-
+	Route::get('login/github', 'Auth\LoginController@redirectToProvider');
+	Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
 });
