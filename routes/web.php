@@ -15,12 +15,15 @@
 Route::group(['middleware' => ['web']], function() {
 
 	// Home Page
-	Route::get('/', 'HomeController@index')->name('home');
-	Route::get('/home', 'HomeController@index')->name('home');
+	Route::get('/', 'MainController@index')->name('home');
+	Route::get('/home', 'MainController@index')->name('home');
+
+	// Contact
+	Route::get('/contact', 'MainController@getContact');
+    Route::post('/contact', 'MainController@postContact');
 
 	// Product
 	Route::resource('product', 'ProductController', ['only' => ['index']]);
-	Route::post('product/{id}/cart', 'ProductController@getAddToCart')->name('product.cart');
 
 	// Showing Product Single By Slug
 	Route::get('product/{slug}', 'MainController@show')
@@ -28,15 +31,35 @@ Route::group(['middleware' => ['web']], function() {
 		->where('slug', '[\w\d\-\_]+');
 	
 	// Cart
-	Route::get('cart', 'ProductController@getCart')->name('cart.index');
+	Route::get('cart', 'ProductController@getCart')
+		->name('cart.index');
+	Route::post('product/{id}/cart', 'ProductController@getAddToCart')
+		->name('cart.add');
+	Route::get('product/{id}/cart/reduce', 'ProductController@getReduceByOne')
+		->name('cart.reduce');
+	Route::get('product/{id}/cart/remove', 'ProductController@getRemoveItem')
+		->name('cart.remove');
 
+	// WishList
+	Route::get('wishlist', 'ProductController@getWishList')
+		->name('withlist.index');
+	Route::get('wishlist/{id}/add', 'ProductController@addList')
+		->name('withlist.add');
+	Route::get('wishlist/{id}/remove', 'ProductController@removeList')
+		->name('withlist.remove');
+	
 	// Checkout
-	Route::get('checkout', 'ProductController@getCheckout')->name('checkout');
-	Route::post('checkout', 'ProductController@postCheckout')->name('checkout');
+	Route::group(['middleware'=>'auth'], function(){
+		Route::get('checkout', 'ProductController@getCheckout')->name('checkout');
+		Route::post('checkout', 'ProductController@postCheckout')->name('checkout');
+	});
 	
 	// User
 	Auth::routes();
 	Route::get('logout', 'Auth\LoginController@logout');
+	Route::get('user/profile', 'MainController@userProfile')
+		->name('user.profile')
+		->middleware('auth');
 
 	// Multilanguage
 	Route::get('/{lang}/product', 'ProductController@lang')->name('lang');

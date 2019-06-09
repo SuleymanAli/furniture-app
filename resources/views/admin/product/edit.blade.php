@@ -30,7 +30,7 @@
 	{{-- {{ Form::label('description', 'Description:', ['class'=>'mt-3']) }}
 	{{ Form::textarea('description', null, ['class'=>'form-control', 'required'=>'']) }} --}}
 
-	{{ Form::submit('Create Product', ['class'=>'btn btn-success btn-lg btn-block mt-4']) }}
+	{{ Form::submit('Update Product', ['class'=>'btn btn-success btn-lg btn-block mt-4']) }}
 	{!! Form::close() !!}
 </div>
 @endsection

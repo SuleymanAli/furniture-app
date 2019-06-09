@@ -69,6 +69,12 @@
                             </div>
                         </div>
                     </form>
+                    <p class="text-center mt-4">
+                        Don`t Have An Account? 
+                        <a href="{{ route('register') }}" class="text-info">
+                            Register
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>

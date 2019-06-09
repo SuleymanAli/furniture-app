@@ -23,8 +23,16 @@
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu p-2">
-						<li href="#">Reduce By 1</li>
-						<li href="#">Reduce All</li>
+						<li>
+							<a href="{{ route('cart.reduce', $product['item']['id']) }}">
+								Reduce By 1
+							</a>
+						</li>
+						<li>
+							<a href="{{ route('cart.remove', $product['item']['id']) }}">
+								Reduce All
+							</a>
+						</li>
 					</ul>
 				</div>
 			</li>
@@ -50,9 +58,9 @@
 </div>
 
 @else
-<div class="col-12 m-auto">
+<div class="col-12 mt-5 pt-5">
 	<div class="col-6 mx-auto">
-		<h2 class="text-center">No Items In Cart!</h2>
+		<h1 class="text-center jumbotron">No Items In Cart!</h1>
 	</div>
 </div>
 

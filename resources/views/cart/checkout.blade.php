@@ -44,13 +44,17 @@
 		<form action="{{ route('checkout') }}" method="post" id="payment-form">
 			<div class="row">
 				<!-- Used to display form errors. -->
-			    <div id="card-errors" role="alert"></div>
+				@if (request()->session()->has('error'))
+				    <div id="card-errors" role="alert" class="alert alert-danger pl-3 py-2">
+						{{ request()->session()->get('error') }}
+				    </div>
+				@endif
 				<div class="col-12">
 					<div class="form-group">
 						<label for="name">
 							Name
 						</label>
-						<input type="text" id="name" class="form-control" required>
+						<input type="text" id="name" name="name" class="form-control" required>
 					</div>
 				</div>
 				<div class="col-12">
@@ -58,7 +62,7 @@
 						<label for="address">
 							Address
 						</label>
-						<input type="text" id="address" class="form-control" required>
+						<input type="text" id="address" name="address" class="form-control" required>
 					</div>
 				</div>
 				<div class="col-12">
@@ -76,7 +80,7 @@
 						</label>
 						<div id="card-element">
 						      <!-- A Stripe Element will be inserted here. -->
-						    </div>
+					    </div>
 						{{-- <input type="text" id="card-element" class="form-control" required> --}}
 					</div>
 				</div>
@@ -106,7 +110,7 @@
 				</div>
 			</div>
 			@csrf
-			<button type="submit" class="btn btn-success">
+			<button class="btn btn-success">
 				Buy Now
 			</button>
 		</form>

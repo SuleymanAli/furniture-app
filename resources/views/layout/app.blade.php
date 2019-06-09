@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -40,6 +40,26 @@
         margin: 0; 
     }
 
+    html, body {
+        height: 100%;
+    }
+
+    #container {
+        min-height: 75%;
+    }
+
+    #main {
+       overflow: auto;
+       /*padding-bottom: 100px;*/
+    }
+
+    #footer {
+        position: relative;
+        height: 50px;
+        /*margin-top: -100px;*/
+        clear: both;
+    }
+
     @media (min-width: 768px) {
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
@@ -70,19 +90,16 @@
                 </span>
                 @endif
             </a>
-            <a class="p-2 text-dark {{ Request::is('order') ? "bg-info" : null }}" href="/order">
-                Order
-            </a>
             @if (Auth::check())
-                @if (auth()->user()->hasAnyRole('admin'))
-                    <a class="p-2 text-dark {{ Request::is('admin') ? "bg-info" : null }}" href="/admin">
-                        Admin
-                    </a>
-                @endif
+            @if (auth()->user()->hasAnyRole('admin'))
+            <a class="p-2 text-dark {{ Request::is('admin') ? "bg-info" : null }}" href="/admin">
+                Admin
+            </a>
             @endif
-                <a href="{{ route('lang', 'en') }}" class="{{ App::getLocale() == 'en' ? 'bg-info' : ''}} ml-2 p-1">
-                    En
-                </a>
+            @endif
+            <a href="{{ route('lang', 'en') }}" class="{{ App::getLocale() == 'en' ? 'bg-info' : ''}} ml-2 p-1">
+                En
+            </a>
             
             <a href="{{ route('lang', 'az') }}" class="{{ App::getLocale() == 'az' ? 'bg-info' : ''}} mx-1 p-1">
                 Az
@@ -101,9 +118,19 @@
                 Hi, {{ Auth::user()->name }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ route('product.index') }}">Products</a>
-                <a class="dropdown-item" href="{{ route('category.index') }}">Categories</a>
-                {{-- <a class="dropdown-item" href="{{ route('tags.index') }}">Tags</a> --}}
+                <a class="dropdown-item" href="{{ route('user.profile') }}">
+                    Your Profile
+                </a>
+
+                <a class="dropdown-item" href="/wishlist">
+                    Wish List
+                    @if (request()->session()->has('wish'))
+                    <span class="badge badge-warning">
+                        {{  count(request()->session()->get('wish')->items) }}
+                    </span>
+                    @endif
+                </a>
+
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
             </div>
@@ -119,98 +146,33 @@
     </ul>
 </div>
 
-{{-- <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Pricing</h1>
-    <p class="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
-</div> --}}
-<div class="container">
+<div class="container" id="container">
     <div class="row">
         @include('partials._messages')
     </div>
-    <div class="row py-4">
+    <div class="row py-4" id="main">
         @yield('content')
     </div>
 </div>
-<div class="container">
-        {{-- <div class="card-deck mb-3 text-center">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Free</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>10 users included</li>
-                        <li>2 GB of storage</li>
-                        <li>Email support</li>
-                        <li>Help center access</li>
-                    </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-                </div>
+<div class="container" id="footer">
+    <footer class="pt-4 border-top">
+        <div class="row">
+            <div class="col-12 col-md">
+                <small class="d-block mb-3 text-muted">&copy; 2017-2019</small>
             </div>
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Pro</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>20 users included</li>
-                        <li>10 GB of storage</li>
-                        <li>Priority email support</li>
-                        <li>Help center access</li>
-                    </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
-                </div>
+            <div class="col-12 col-md">
+                <ul class="list-unstyled text-small text-right">
+                    <li>
+                        <a class="text-muted" href="/contact">
+                            Contact Us
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Enterprise</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>30 users included</li>
-                        <li>15 GB of storage</li>
-                        <li>Phone and email support</li>
-                        <li>Help center access</li>
-                    </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-                </div>
-            </div>
-        </div> --}}
+        </div>
+    </footer>
+</div>
 
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-                    <small class="d-block mb-3 text-muted">&copy; 2017-2019</small>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Features</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Cool stuff</a></li>
-                        <li><a class="text-muted" href="#">Last time</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Resources</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Resource</a></li>
-                        <li><a class="text-muted" href="#">Final resource</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>About</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Team</a></li>
-                        <li><a class="text-muted" href="#">Terms</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    @yield('js')
+@yield('js')
 </body>
 </html>

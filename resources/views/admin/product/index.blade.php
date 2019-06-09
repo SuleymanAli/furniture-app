@@ -37,7 +37,7 @@
 					@endif
 				</td>
 				<td>
-					{{ $product->image }}
+					{{ substr($product->image,0, 50) }}
 				</td>
 				<td>
 					<a href="{{ route('product.createMultilang', $product->id) }}" class="btn btn-sm btn-success">
