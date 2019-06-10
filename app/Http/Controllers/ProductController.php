@@ -39,6 +39,29 @@ class ProductController extends Controller
     }
 
 
+    public function search(Request $request)
+    {
+        // $request->validate([
+        //     'query' => 'required|min:3'
+        // ]);
+
+        $query = $request->input('query');
+
+        $categories = Category::all();
+
+        $roductTranslation = ProductTranslation::
+        where('title', 'like', "%$query%")
+        ->where('language', '=', App::getLocale())
+        ->orWhere('description', 'like', "%$query%")
+        ->where('language', '=', App::getLocale())
+        ->paginate(6);
+
+        return view('search', [
+            'translations' => $roductTranslation
+        ]);
+    }
+
+
     // Change The Language
     public function lang($lang)
     {

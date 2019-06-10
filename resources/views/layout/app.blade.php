@@ -51,20 +51,20 @@
     #main {
        overflow: auto;
        /*padding-bottom: 100px;*/
-    }
+   }
 
-    #footer {
-        position: relative;
-        height: 50px;
-        /*margin-top: -100px;*/
-        clear: both;
-    }
+   #footer {
+    position: relative;
+    height: 50px;
+    /*margin-top: -100px;*/
+    clear: both;
+}
 
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
-        }
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
     }
+}
 </style>
 <!-- Custom Styles -->
 @yield('css')
@@ -75,6 +75,16 @@
         <h5 class="my-0 mr-md-auto font-weight-normal">
             <a href="/">Woodpacker</a>
         </h5>
+        
+        @if (Request::is('product') || Request::is('search'))
+        <form class="form-inline mr-md-auto col-4" action="{{ route('search') }}" method="GET">
+            <input class="form-control mr-sm-2 col-9" type="text" placeholder="Search" aria-label="Search" name="query" value="{{ request()->input('query') }}">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                Search
+            </button>
+        </form>
+        @endif
+        
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-dark {{ Request::is('/') || Request::is('home') ? "bg-info" : null }}" href="/">
                 Home
