@@ -26,5 +26,10 @@ class RoleTableSeeder extends Seeder
         $role_admin->name = 'Admin';
         $role_admin->description = 'A Admin';
         $role_admin->save();
+
+        $role_facebook_user = new Role();
+        $role_facebook_user->name = 'F.User';
+        $role_facebook_user->description = 'A Facebook User';
+        $role_facebook_user->save();
     }
 }
