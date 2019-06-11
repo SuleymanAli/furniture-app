@@ -14,6 +14,8 @@ use Session;
 
 class AdminController extends Controller
 {
+    /* Create, Show, Update, Delete Of Products From The Admin Panel */
+
     /**
      * Display a listing of the resource.
      *
@@ -193,6 +195,9 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
+    /*  */
+
+    // Add Another Language The Current Product By ID (GET)
     public function createMultilang($id)
     {
         $product = Product::find($id);
@@ -200,6 +205,7 @@ class AdminController extends Controller
         return view('admin.product.create-multilang', ['product' => $product]);
     }
 
+    // Add Another Language The Current Product By ID (POST)
     public function storeMultilang(Request $request, $product_id)
     {
         // Validation
@@ -242,6 +248,7 @@ class AdminController extends Controller
         return redirect()->route('admin.index')->with('success', 'Language Added To The Product');
     }
 
+    // Edit Available Language Of Current Product By ID (GET)
     public function editMultilang($id)
     {
         $translation = ProductTranslation::find($id);
@@ -249,6 +256,7 @@ class AdminController extends Controller
         return view('admin.product.edit-multilang', ['translation' => $translation]);
     }
 
+    // Edit Available Language Of Current Product By ID (POST)
     public function updateMultilang(Request $request, $id)
     {
         $productTranslation = ProductTranslation::find($id);
@@ -281,6 +289,7 @@ class AdminController extends Controller
         return redirect()->route('admin.show', $productTranslation->product->id); 
     }
 
+    // Delete This Language Of Product By ID (DELETE)
     public function destroyMultilang($id)
     {
         $productTranslation = ProductTranslation::find($id);
@@ -292,6 +301,9 @@ class AdminController extends Controller
         return redirect()->route('admin.show', $productTranslation->product->id);
     }
 
+    /* User Control List */
+
+    // Show All Users With Own Roles In Admin Panel User Roles Area
     public function getAdminPage()
     {
         $users = User::all();
@@ -299,6 +311,7 @@ class AdminController extends Controller
         return view('admin.admin', ['users' => $users]);
     }
 
+    // Assign Role To User 
     public function AssignRole(Request $request)
     {
         $user = User::where('email', $request->email)->first();

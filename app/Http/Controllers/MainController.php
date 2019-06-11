@@ -16,12 +16,15 @@ class MainController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    // Show 8 Category On The Front Side
     public function index()
     {
         $categories = Category::take(8)->get();
         return view('home', ['categories' => $categories]);
     }
 
+    // Product Url Address For SEO (Eg: title-one) 
     public function show($slug){
         // Fetch From The DB Based On Slug
         $productTranslation = ProductTranslation::where('slug', '=', $slug)->first();
@@ -30,6 +33,7 @@ class MainController extends Controller
         return view('products.show', ['productTranslation' => $productTranslation]);
     }
 
+    // Show User Orders Your Profile Area On The Front Side 
     public function userProfile(){
     	$orders = Auth::user()->orders;
     	$orders->transform(function($order, $key){
@@ -40,10 +44,12 @@ class MainController extends Controller
     	return view('user.profile', ['orders' => $orders]);
     }
 
+    // Contact Page (GET)
     public function getContact(){
         return view('page.contact');
     }
 
+    // Contact Page (POST)
     public function postContact(Request $request){
         $this->validate($request, [
             'email'=>'required|email',

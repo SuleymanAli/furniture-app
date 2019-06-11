@@ -17,16 +17,22 @@ use Stripe\Stripe;
 
 class ProductController extends Controller
 {
+    /* This ProductController Consist Of Front Side */
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    // Show Category And Product On Product Page In Front Side
     public function index()
     {
+        // Show Category And Product With Doing Paginate
         $products = Product::orderBy('updated_at', 'desc')->paginate(4);
         $categories = Category::all();
 
+        // Paginate Products By Category If Have Request From Category (eg: com/?category=shelf) 
         if (request()->category) {
             $category = Category::find(request()->category);
             $products = $category->products()->orderBy('updated_at', 'desc')->paginate(6);
@@ -38,12 +44,12 @@ class ProductController extends Controller
         ]);
     }
 
-
+    // Search Products
     public function search(Request $request)
     {
-        // $request->validate([
-        //     'query' => 'required|min:3'
-        // ]);
+        $request->validate([
+            'query' => 'required|min:3'
+        ]);
 
         $query = $request->input('query');
 
@@ -194,6 +200,7 @@ class ProductController extends Controller
 
     /* Wish List */
 
+    // Show Wishlist
     public function getWishList()
     {
         if (!Session::has('wish')) {
@@ -208,6 +215,7 @@ class ProductController extends Controller
         ]);
     }
 
+    // Add Product Wishlist
     public function addList(Request $request, $id)
     {
         $product = Product::find($id);
@@ -222,6 +230,7 @@ class ProductController extends Controller
         return redirect()->back()->withSuccess('Product Added Your Wish');
     }
 
+    // Remove Product From Wishlist
     public function removeList($id)
     {
         $oldWish = Session::has('wish') ? Session::get('wish') : null;

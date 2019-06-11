@@ -9,6 +9,8 @@ use Storage;
 
 class CategoryController extends Controller
 {
+    /* This CategoryController Consist Of Admin Panel Category Area */
+
     /**
      * Display a listing of the resource.
      *

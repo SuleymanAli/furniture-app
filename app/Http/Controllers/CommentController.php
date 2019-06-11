@@ -17,6 +17,8 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    // Authenticated Users Can Comment Product
     public function store(Request $request, $product_id)
     {
         $this->validate($request, [
@@ -52,6 +54,9 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    // Authenticated Users Can Delete His/Her Own Comment(s)
+    // User Can Delete Comments Of ALL User Who Has Admin Role
     public function destroy($id)
     {
         $comment = Comment::find($id);
