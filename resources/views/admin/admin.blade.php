@@ -8,9 +8,9 @@
 				<th>Name</th>
 				<th>Email</th>
 				<th>User</th>
+				<th>Facebook</th>
 				<th>Author</th>
 				<th>Admin</th>
-				<th>Facebook</th>
 				<th></th>
 			</thead>
 			<tbody>
