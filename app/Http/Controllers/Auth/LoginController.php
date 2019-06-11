@@ -63,13 +63,13 @@ class LoginController extends Controller
             if (!$user) {
                 $user = User::create([
                     'email' => $facebookUser->getEmail(),
-                    'name' => $facebookUser->getEmail(),
+                    'name' => $facebookUser->getName(),
                     'provider_id' => $facebookUser->getId(),
                     'provider' => 'Facebook'
                 ]);
 
                 $role_f_user = Role::where('name', 'F.User')->first();
-                
+
                 $user->roles()->sync($role_f_user);
             }
 
