@@ -44,15 +44,15 @@ return [
         ],
     ],
 
-    // 'facebook' => [
-    //     'client_id' => '1511009105699998',
-    //     'client_secret' => '999ae197e783ac6e6c1e6c1091264481',
-    //     'redirect' => 'http://127.0.0.1:8000/login/facebook/callback',
-    // ],
-
-    'github' => [
-        'client_id' => env('GITHUB_CLIENT_ID'),
-        'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => env('GITHUB_CALLBACK'),
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_CALLBACK'),
     ],
+
+    // 'github' => [
+    //     'client_id' => env('GITHUB_CLIENT_ID'),
+    //     'client_secret' => env('GITHUB_CLIENT_SECRET'),
+    //     'redirect' => env('GITHUB_CALLBACK'),
+    // ],
 ];
