@@ -57,7 +57,7 @@ class LoginController extends Controller
         {
             $facebookUser = Socialite::driver('facebook')->user();
 
-            $user = User::where('provider_id', $facebookUser->getId()->first());
+            $user = User::where('provider_id', $facebookUser->getId())->first();
 
             if (!$user) {
                 $user = User::create([
