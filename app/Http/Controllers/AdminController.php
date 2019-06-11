@@ -317,6 +317,10 @@ class AdminController extends Controller
             $user->roles()->attach(Role::where('name', 'Admin')->first());
         }
 
+        if ($request['role_f_user']) {
+            $user->roles()->attach(Role::where('name', 'F.User')->first());
+        }
+
         return redirect()->back();
     }
 }

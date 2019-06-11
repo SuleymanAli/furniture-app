@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="container">
-    {{ dd(Auth::user()->roles) }}
     @if (session('status'))
     <div class="row justify-content-center">
         <div class="col-md-12">

@@ -27,6 +27,9 @@
 								<input type="checkbox" {{ $user->hasRole('User') ? 'checked' : '' }} name="role_user">
 							</td>
 							<td>
+								<input type="checkbox" {{ $user->hasRole('F.User') ? 'checked' : '' }} name="role_f_user">
+							</td>
+							<td>
 								<input type="checkbox" {{ $user->hasRole('Author') ? 'checked' : '' }} name="role_author">
 							</td>
 							<td>

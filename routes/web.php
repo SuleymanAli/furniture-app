@@ -98,6 +98,7 @@ Route::group(['middleware' => ['web']], function() {
 			->name('comments.destroy');
 	});
 
+	// Facebook Login
 	Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
 	Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');
 });
