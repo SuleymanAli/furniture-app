@@ -63,8 +63,8 @@ class LoginController extends Controller
                 $user = User::create([
                     'email' => $facebookUser->getEmail(),
                     'name' => $facebookUser->getEmail(),
-                    'provider_id' => $facebookUser->getId(),
-                    'provider_id' => $facebookUser
+                    'provider_id' => $facebookUser->getId()
+                    // 'provider' => $facebookUser
                 ]);
             }
 
