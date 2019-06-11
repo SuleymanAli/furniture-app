@@ -67,7 +67,9 @@ class LoginController extends Controller
                     'provider' => 'Facebook'
                 ]);
 
-                $user->roles = 'F.User';
+                $role_f_user = Role::where('name', 'F.User')->first();
+                
+                $user->roles()->sync($role_f_user);
             }
 
             Auth::login($user, true);
