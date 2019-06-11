@@ -23,7 +23,7 @@ class UserTableSeeder extends Seeder
         $user->password = bcrypt('adam');
         $user->save();
 
-        $user->roles()->attach($role_user);
+        $user->roles()->sync($role_user);
 
         $author = new User();
         $author->name = 'Joseph';
@@ -31,7 +31,7 @@ class UserTableSeeder extends Seeder
         $author->password = bcrypt('adam');
         $author->save();
 
-        $author->roles()->attach($role_author);
+        $author->roles()->sync($role_author);
 
         $admin = new User();
         $admin->name = 'Albert';
@@ -39,6 +39,6 @@ class UserTableSeeder extends Seeder
         $admin->password = bcrypt('adam');
         $admin->save();
 
-        $admin->roles()->attach($role_admin);
+        $admin->roles()->sync($role_admin);
     }
 }
