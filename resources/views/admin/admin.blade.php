@@ -10,6 +10,7 @@
 				<th>User</th>
 				<th>Author</th>
 				<th>Admin</th>
+				<th>Facebook</th>
 				<th></th>
 			</thead>
 			<tbody>
