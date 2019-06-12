@@ -29,15 +29,18 @@ class ProductController extends Controller
     public function index()
     {
         // Show Category And Product With Doing Paginate
-        $products = Product::where('confirmed', '1')->orderBy('updated_at', 'desc')->paginate(4);
+        $products = Product::where('confirmed', 1)->orderBy('updated_at', 'desc')->paginate(4);
         $categories = Category::all();
 
         // Paginate Products By Category If Have Request From Category (eg: com/?category=shelf) 
         if (request()->category) {
             $category = Category::find(request()->category);
-            $products = $category->products()->orderBy('updated_at', 'desc')->paginate(6);
+            $products = $category->products()
+                ->where('confirmed', 1)
+                ->orderBy('updated_at', 'desc')
+                ->paginate(6);
         }
-        
+        // dd($products);
         return view('products.index', [
             'products' => $products,
             'categories' => $categories
