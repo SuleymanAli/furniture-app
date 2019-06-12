@@ -110,18 +110,6 @@
               User Roles
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/roles">
-              <span data-feather="file-text"></span>
-              Orders
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/roles">
-              <span data-feather="file-text"></span>
-              User Roles
-            </a>
-          </li>
         </ul>
       </div>
     </nav>
