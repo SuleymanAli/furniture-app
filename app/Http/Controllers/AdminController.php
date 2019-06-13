@@ -11,6 +11,9 @@ use App\User;
 use App\Role;
 use Storage;
 use Session;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
@@ -52,7 +55,7 @@ class AdminController extends Controller
         // Validation
         $this->validate($request, [
             'price' => 'required|numeric',
-            'image'  => 'image|nullable|max:1999',
+            'image'  => 'required|image|max:1999',
             'category_id' => 'sometimes|integer',
             'title' => 'required|unique:product_translations,title',
             'description' => 'required',
@@ -68,21 +71,14 @@ class AdminController extends Controller
 
         // Save Our Image
         if($request->hasFile('image')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('image')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = $request->file('image')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'_'.time().'.'.$extension;
-            // Upload Image
-            $path = $request->file('image')->storeAs('public/product_images', $fileNameToStore);
-        } else {
-            $fileNameToStore = 'no-image.png';
+            $file = Input::file('image');
+
+            $image = Image::make($file);
+
+            Response::make($image->encode('jpeg'));
         }
 
-        $product->image = $fileNameToStore;
+        $product->image = $image;
 
         $product->save();
 
@@ -154,23 +150,18 @@ class AdminController extends Controller
 
         // Save Our Image
         if($request->hasFile('image')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('image')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = $request->file('image')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
-            // Upload Image
-            $path = $request->file('image')->storeAs('public/product_images', $fileNameToStore);
+            $file = Input::file('image');
+
+            $image = Image::make($file);
+
+            Response::make($image->encode('jpeg'));
         }
 
         // Saving Data To The Database
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
         if ($request->hasFile('image')) {
-            $product->image = $fileNameToStore;
+            $product->image = $image;
         }
 
         $product->save();
@@ -193,6 +184,19 @@ class AdminController extends Controller
         Session::flash('success','This Product Deleted Successfully');
 
         return redirect()->route('admin.index');
+    }
+
+    public function showProductImage($id)
+    {
+        $product = Product::find($id);
+
+        $image = Image::make($product->image);
+
+        $response = Response::make($image->encode('jpeg'));
+
+        $response->header('Content-Type', 'image/jpeg');
+
+        return $response;
     }
 
     /*  */

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Intervention\Image\Facades\Image;
 use Session;
 use Storage;
 
@@ -36,7 +39,7 @@ class CategoryController extends Controller
 
         $this->validate($request, [
             'name'  => 'required',
-            'image'  => 'image|nullable|max:1999'
+            'image'  => 'required|image|max:1999'
         ]);
 
         // Store Data To The Database
@@ -47,21 +50,18 @@ class CategoryController extends Controller
 
         // Save Our Image
         if($request->hasFile('image')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('image')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = $request->file('image')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'_'.time().'.'.$extension;
-            // Upload Image
-            $path = $request->file('image')->storeAs('public/category_images', $fileNameToStore);
+
+            $file = Input::file('image');
+
+            $image = Image::make($file);
+
+            Response::make($image->encode('jpeg'));
+            
         } else {
             $fileNameToStore = 'no-image.png';
         }
 
-        $category->image = $fileNameToStore;
+        $category->image = $image;
 
         $category->save();
 
@@ -110,23 +110,18 @@ class CategoryController extends Controller
 
         // Save Our Image
         if($request->hasFile('image')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('image')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = $request->file('image')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
-            // Upload Image
-            $path = $request->file('image')->storeAs('public/category_images', $fileNameToStore);
+            $file = Input::file('image');
+
+            $image = Image::make($file);
+
+            Response::make($image->encode('jpeg'));
         }
 
         // Saving Data To The Database
         $category->name = $request->input('name');
 
         if ($request->hasFile('image')) {
-            $category->image = $fileNameToStore;
+            $category->image = $image;
         }
 
         $category->save();
@@ -144,25 +139,22 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
 
-        //Check if post exists before deleting
-        // if (!isset($post)){
-        //     return redirect('/posts')->with('error', 'No Post Found');
-        // }
-
-        // Check for correct user
-        // if(auth()->user()->id !==$post->user_id){
-        //     return redirect('/posts')->with('error', 'Unauthorized Page');
-        // }
-
-        // Delete To The Storage
-        if($category->image != 'no-image.png'){
-            // Delete Image
-            Storage::delete('public/category_images/'.$category->image);
-        }
-
         // Delete To The Database        
         $category->delete();
 
         return redirect()->route('category.index')->with('success', 'Category Removed');
+    }
+
+    public function showCategoryImage($id)
+    {
+        $category = Category::find($id);
+
+        $image = Image::make($category->image);
+
+        $response = Response::make($image->encode('jpeg'));
+
+        $response->header('Content-Type', 'image/jpeg');
+
+        return $response;
     }
 }

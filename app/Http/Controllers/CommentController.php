@@ -10,15 +10,13 @@ use Session;
 
 class CommentController extends Controller
 {
-
+    // Authenticated Users Can Comment Product
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
-    // Authenticated Users Can Comment Product
     public function store(Request $request, $product_id)
     {
         $this->validate($request, [
@@ -47,6 +45,8 @@ class CommentController extends Controller
         return redirect()->route('product.show', $productTranslationSlug);
     }
 
+    // Authenticated Users Can Delete His/Her Own Comment(s)
+    // User Can Delete Comments Of ALL User Who Has Admin Role
 
     /**
      * Remove the specified resource from storage.
@@ -54,9 +54,6 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-    // Authenticated Users Can Delete His/Her Own Comment(s)
-    // User Can Delete Comments Of ALL User Who Has Admin Role
     public function destroy($id)
     {
         $comment = Comment::find($id);

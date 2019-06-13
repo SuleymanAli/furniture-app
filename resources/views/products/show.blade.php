@@ -6,7 +6,7 @@
 	<div class="card mb-4 shadow-sm d-flex flex-row no-gutters">
 		<div class="col-6 order-2">
 			@if(isset($productTranslation->product->image))
-			<img src="{{ asset('storage/product_images/'.$productTranslation->product->image) }}" class="img-fluid w-100" style="height: 100%">
+			<img src="/product/{{ $productTranslation->product->id }}/image" class="img-fluid w-100" style="height: 100%">
 			@endif
 		</div>
 		<div class="col-6 order-1">

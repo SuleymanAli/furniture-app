@@ -12,13 +12,12 @@ use Session;
 
 class MainController extends Controller
 {
+    // Show 8 Category On The Front Side
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-
-    // Show 8 Category On The Front Side
     public function index()
     {
         $categories = Category::take(8)->get();
@@ -28,10 +27,11 @@ class MainController extends Controller
     // Product Url Address For SEO (Eg: title-one) 
     public function show($slug){
         // Fetch From The DB Based On Slug
-        $productTranslation = ProductTranslation::whereHas('product', function($product){
-            $product->where('confirmed', '1');
-        })->where('slug', '=', $slug)->first();
-
+        // $productTranslation = ProductTranslation::whereHas('product', function($product){
+        //     $product->where('confirmed', 1);
+        // })->where('slug', '=', $slug)->first();
+        $productTranslation = ProductTranslation::where('slug', '=', $slug)->first();
+        
         // Return The View And Pass In The Product Translation Object
         return view('products.show', ['productTranslation' => $productTranslation]);
     }

@@ -27,6 +27,7 @@ Route::group(['middleware' => ['web']], function() {
 
 	// Product
 	Route::resource('product', 'ProductController', ['only' => ['index']]);
+	Route::get('product/{id}/image', 'AdminController@showProductImage');
 
 	// Showing Product Single By Slug
 	Route::get('product/{slug}', 'MainController@show')
@@ -87,6 +88,7 @@ Route::group(['middleware' => ['web']], function() {
 		
 		// Category
 		Route::resource('category', 'CategoryController', ['except' => ['create', 'show']]);
+		Route::get('category/{id}/image', 'CategoryController@showCategoryImage');
 	});
 
 	Route::group(['middleware'=>'auth'], function(){

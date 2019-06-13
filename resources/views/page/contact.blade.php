@@ -8,7 +8,7 @@
         <!-- Main jumbotron for a primary marketing message or call to action -->
         <div class="jumbotron">
             <div class="container">
-                <h1 class="display-3">Hello, world!</h1>
+                <h1 class="display-3">Hello {{ auth()->user()->name }}!</h1>
                 <p>This is a template for a simple marketing or informational website. It includes a large callout called a
                     jumbotron and three supporting pieces of content. Use it as a starting point to create something more
                     unique.
@@ -25,7 +25,7 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label name="email">Email address:</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email" name="email" value="{{ auth()->user()->email }}">
                     </div>
                     <div class="form-group">
                         <label name="subject">Subject:</label>

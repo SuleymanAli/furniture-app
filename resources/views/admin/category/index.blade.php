@@ -17,7 +17,7 @@
 			<tr>
 				<td>{{ $category->name }}</td>
 				<td>
-					<img src="/storage/category_images/{{ $category->image }}" class="img-fluid">
+					<img src="/category/{{ $category->id }}/image" class="img-fluid">
 				</td>
 				<td>
 					<a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-secondary">

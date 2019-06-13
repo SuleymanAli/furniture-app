@@ -4,7 +4,7 @@
 
 <div class="col-md-8">
     <div class="card">
-        <img src="{{ asset('storage/product_images/'.$product->image) }}" alt="" class="img-fluid">
+        <img src="/product/{{ $product->id }}/image" alt="" class="img-fluid">
         <div class="card-body">
             <h5 class="card-title">
                 Category: {{$product->category->name}}

@@ -25,7 +25,7 @@
 			<div class="">
 				@if(isset($translation->product->image))
 				<a href="{{ route('product.show', $translation->slug) }}">
-					<img src="{{ asset('storage/product_images/'.$translation->product->image) }}" class="img-fluid w-100" style="height: 100%">
+					<img src="/product/{{ $translation->product->id }}/image" class="img-fluid w-100" style="height: 100%">
 				</a>
 				@endif
 			</div>

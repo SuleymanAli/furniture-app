@@ -23,7 +23,7 @@
         @foreach ($categories as $category)
         <div class="col-3">
             <a href="{{ route('product.index', ['category' => $category->id]) }}">
-                <img src="/storage/category_images/{{ $category->image }}" class="img-fluid">
+                <img src="/category/{{ $category->id }}/image" class="img-fluid">
                 <storng class="d-flex justify-content-center py-2">{{ $category->name }}</storng>
             </a>
         </div>

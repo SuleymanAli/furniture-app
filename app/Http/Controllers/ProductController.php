@@ -18,25 +18,23 @@ use Stripe\Stripe;
 class ProductController extends Controller
 {
     /* This ProductController Consist Of Front Side */
+    // Show Category And Product On Product Page In Front Side
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    // Show Category And Product On Product Page In Front Side
     public function index()
     {
         // Show Category And Product With Doing Paginate
-        $products = Product::where('confirmed', 1)->orderBy('updated_at', 'desc')->paginate(4);
+        $products = Product::orderBy('updated_at', 'desc')->paginate(4);
         $categories = Category::all();
 
         // Paginate Products By Category If Have Request From Category (eg: com/?category=shelf) 
         if (request()->category) {
             $category = Category::find(request()->category);
             $products = $category->products()
-                ->where('confirmed', 1)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(6);
         }
